@@ -29,7 +29,97 @@
 #ifndef  CRC_CFG_H
 #define  CRC_CFG_H
 
+/*
+*********************************************************************************************************
+*                                                 PORT
+*
+* Note(s) : (1) 以下添加依赖部分移植
+*               
+*
+*********************************************************************************************************
+*/
 
+                                                        /* ------------------ CPU WORD-ENDIAN ORDER ------------------- */
+#define  CPU_ENDIAN_TYPE_NONE                      0u
+#define  CPU_ENDIAN_TYPE_BIG                       1u   /* Big-   endian word order (see Note #1a).                     */
+#define  CPU_ENDIAN_TYPE_LITTLE                    2u   /* Little-endian word order (see Note #1b).                     */
+
+#define  CPU_CFG_ENDIAN_TYPE            CPU_ENDIAN_TYPE_LITTLE
+
+typedef  unsigned  char        CPU_BOOLEAN;                     /*  8-bit boolean or logical                            */
+typedef  unsigned  char        CPU_INT08U;                      /*  8-bit unsigned integer                              */
+typedef  unsigned  short       CPU_INT16U;                      /* 16-bit unsigned integer                              */
+typedef  unsigned  int         CPU_INT32U;                      /* 32-bit unsigned integer                              */
+typedef  CPU_INT32U  CPU_ADDR;                                  /* CPU address type based on address bus size.          */
+typedef  CPU_INT32U  CPU_DATA;																	/* CPU data    type based on data    bus size.          */
+typedef  CPU_ADDR    CPU_SIZE_T;                                /* Defines CPU standard 'size_t'   size.                */
+
+#define  CPU_WORD_SIZE_32                          				 4u   /* 32-bit word size (in octets).                                */
+
+
+                                                                /* ----------------- BOOLEAN DEFINES ------------------ */
+#define  DEF_NO                                            0u
+#define  DEF_YES                                           1u
+#define  DEF_DISABLED                                      0u
+#define  DEF_ENABLED                                       1u
+#define  DEF_INVALID                                       0u
+#define  DEF_VALID                                         1u
+
+#define  DEF_OCTET_NBR_BITS                                8u
+#define  DEF_BIT(bit)                                                   (1uL << (bit))
+
+                                                                /* ------------------- BIT DEFINES -------------------- */
+#define  DEF_BIT_00                                     0x01u
+#define  DEF_BIT_01                                     0x02u
+#define  DEF_BIT_02                                     0x04u
+#define  DEF_BIT_03                                     0x08u
+#define  DEF_BIT_04                                     0x10u
+#define  DEF_BIT_05                                     0x20u
+#define  DEF_BIT_06                                     0x40u
+#define  DEF_BIT_07                                     0x80u
+#define  DEF_BIT_08                                   0x0100u
+#define  DEF_BIT_09                                   0x0200u
+#define  DEF_BIT_10                                   0x0400u
+#define  DEF_BIT_11                                   0x0800u
+#define  DEF_BIT_12                                   0x1000u
+#define  DEF_BIT_13                                   0x2000u
+#define  DEF_BIT_15                                   0x8000u
+#define  DEF_BIT_17                               0x00020000u
+#define  DEF_BIT_19                               0x00080000u
+#define  DEF_BIT_21                               0x00200000u
+#define  DEF_BIT_23                               0x00800000u
+#define  DEF_BIT_25                               0x02000000u
+#define  DEF_BIT_27                               0x08000000u
+#define  DEF_BIT_29                               0x20000000u
+#define  DEF_BIT_31                               0x80000000u
+
+
+#define  DEF_BIT_SET(val, mask)                        ((val) = ((val) | (mask)))
+
+#define  DEF_BIT_IS_SET(val, mask)                    (((((val) & (mask)) == (mask)) && ((mask) != 0u)) ? (DEF_YES) : (DEF_NO))
+
+#define  CPU_SW_EXCEPTION(err_rtn_val)              do {                    \
+                                                        ;									  \
+                                                    } while (1)
+
+
+#define  MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)   do {                                                                             \
+                                                                   CPU_INT08U  *destptr = (CPU_INT08U *)(addr_dest);                            \
+                                                                   CPU_INT08U  *srcptr  = (CPU_INT08U *)(addr_src);                             \
+                                                                   (*((destptr) + 0))   = (*((srcptr) + 0));                                    \
+                                                                   (*((destptr) + 1))   = (*((srcptr) + 1));                                    \
+                                                                   (*((destptr) + 2))   = (*((srcptr) + 2));                                    \
+                                                                   (*((destptr) + 3))   = (*((srcptr) + 3)); } while (0)												
+
+#define  MEM_VAL_COPY_GET_INTU(addr_dest, addr_src, val_size)    do {                                                                                  \
+                                                                            CPU_SIZE_T  _i;                                                                   \
+                                                                                                                                                              \
+                                                                            for (_i = 0; _i < (val_size); _i++) {                                             \
+                                                                                (*(((CPU_INT08U *)(addr_dest)) + _i)) = (*(((CPU_INT08U *)(addr_src)) + _i)); \
+                                                                            }                                                                                 \
+                                                                        } while (0)
+
+#define  MEM_VAL_COPY_SET_INT32U(addr_dest, addr_src)    MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)
 /*
 *********************************************************************************************************
 *                                                 EDC
@@ -70,5 +160,5 @@
 
 #define  ECC_HAMMING_CFG_ARG_CHK_EXT_EN          DEF_ENABLED    /* See Note #1.                                         */
 
-
+																																
 #endif

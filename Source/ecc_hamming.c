@@ -44,6 +44,7 @@
 
 #define    MICRIUM_SOURCE
 #define    ECC_HAMMING_MODULE
+#include  <string.h>
 #include  <ecc_hamming.h>
 #include  <crc_util.h>
 
@@ -199,7 +200,7 @@ static  CPU_INT32U  Hamming_ParCalc_32(CPU_INT32U    data_32);
 *                       primary & extension buffers, 'p_buf' & 'p_buf_ext' respectively:
 *
 *                               len         = 100;
-*                               len_buf     = len / HAMMING_LEN_OCTET_PER_LOOP_ITER;
+*                               len_buf     = (len / HAMMING_LEN_OCTET_PER_LOOP_ITER)*HAMMING_LEN_OCTET_PER_LOOP_ITER;
 *                               len_buf_ext = len % HAMMING_LEN_OCTET_PER_LOOP_ITER;
 *                               p_buf_ext   = (CPU_INT08U *)p_buf + len_buf;
 *
@@ -407,7 +408,8 @@ void  Hamming_Calc (void        *p_buf,
        *p_err = ECC_ERR_NULL_PTR;
         return;
     }
-    Mem_Clr((void *)p_ecc, HAMMING_LEN_OCTET_ECC);              /* Init ECC buf for err(s) (see Note #6).               */
+    //Mem_Clr((void *)p_ecc, HAMMING_LEN_OCTET_ECC);            /* Init ECC buf for err(s) (see Note #6).               */
+		memset((void *)p_ecc, 0, HAMMING_LEN_OCTET_ECC);
 
     if (p_buf == (void *)0) {                                   /* Validate     buf ptr.                                */
        *p_err = ECC_ERR_NULL_PTR;
